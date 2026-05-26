@@ -1,35 +1,77 @@
-import useAddTerritory from '../api/add-territory';
+import { useRef, useState } from 'react';
+import Form, { SimpleItem, GroupItem, RequiredRule, Label } from 'devextreme-react/form';
+import { Button } from 'devextreme-react/button';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import useAddTerritory from '../api/add-territory';
+import type { Territory } from '../types/territory';
 
 export default function AddNew() {
     const navigate = useNavigate();
-    const { mutate, isPending} = useAddTerritory();
-    const [formData, setFormData] = useState({ name: '', code: '' });
+    const { mutate, isPending } = useAddTerritory();
+    const formRef = useRef<any>(null);
+    const [formData, setFormData] = useState<Territory>({
+        name: '',
+        code: '',
+        region:''
+    });
 
     const onSubmit = () => {
-        mutate(formData);
-        navigate('/')
+        const validationResult = formRef.current?.instance.validate && formRef.current.instance.validate();
+        if (validationResult && !validationResult.isValid) {
+            return;
+        }
 
+        mutate(formData, {
+            onSuccess: () => navigate('/')
+        });
+       
     };
 
     return (
         <div style={{ padding: '20px' }}>
             <h2>Add New Territory</h2>
 
-            <input
-                placeholder="Name"
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            />
-            <input
-                placeholder="Code"
-                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
-            />
+            <Form
+                ref={formRef}
+                onFieldDataChanged={(e) => {
+                    setFormData(prev => ({
+                        ...prev,
+                        [e.dataField as keyof Territory]: e.value
+                    } as Territory));
+                }}
+            >
+                <GroupItem colCount={2} caption="Territory Information">
+                    <SimpleItem dataField="name" editorType="dxTextBox">
+                        <Label text="Name" />
+                        <RequiredRule message="Name is required" />
+                    </SimpleItem>
 
-            <button onClick={onSubmit} disabled={isPending}>
-                {isPending ? 'Saving...' : 'Save'}
-            </button>
-            <button onClick={() => navigate('/')}>Cancel</button>
+                    <SimpleItem dataField="code" editorType="dxTextBox">
+                        <Label text="Code" />
+                        <RequiredRule message="Code is required" />
+                    </SimpleItem>
+                    <SimpleItem dataField="region" editorType="dxTextBox">
+                        <Label text="Region" />
+                        <RequiredRule message="Region is required" />
+                    </SimpleItem>
+                </GroupItem>
+            </Form>
+
+            <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+                <Button
+                    text={isPending ? 'Saving...' : 'Save'}
+                    type="success"
+                    stylingMode="contained"
+                    disabled={isPending}
+                    onClick={onSubmit}
+                />
+                <Button
+                    text="Cancel"
+                    type="danger"
+                    stylingMode="contained"
+                    onClick={() => navigate('/')}
+                />
+            </div>
         </div>
     );
 }

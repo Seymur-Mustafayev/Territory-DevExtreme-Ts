@@ -3,4 +3,5 @@ export interface Territory {
     createdAt?: string;
     name: string;
     code: string;
+    region:string
 }

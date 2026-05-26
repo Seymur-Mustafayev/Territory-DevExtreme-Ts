@@ -11,21 +11,18 @@ import {
     GroupPanel,
     Grouping,
     Editing,
-    Lookup,
 } from "devextreme-react/data-grid";
 import useTerritories from "../api/get-territories";
-import useGetTerritoiresLookups from "../api/get-territories-lookups";
 import { useNavigate } from "react-router-dom";
 
 export default function FullViewGrid() {
 
     const navigate = useNavigate()
     const { data, isLoading } = useTerritories();
-    const { data: lookups } = useGetTerritoiresLookups();
+  
 
 
-
-
+  
 
     if (isLoading) return <div>Loading...</div>;
 
@@ -60,14 +57,7 @@ export default function FullViewGrid() {
                     <Item name="columnChooserButton" />
                 </Toolbar>
 
-                <Column dataField="region" caption="Region">
-                    <Lookup
-                        dataSource={lookups}
-                        displayExpr="name"
-                        valueExpr="code"
 
-                    />
-                </Column>
                 <Column dataField="code" caption="Code" width={100} alignment="center" groupIndex={0} />
                 <Column dataField="id" caption="ID" width={70} alignment="center" />
                 <Column dataField="name" caption="Name" />
