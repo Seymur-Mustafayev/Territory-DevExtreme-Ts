@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import type { Territory } from "../types/territories";
+import type { Territory } from "../types/territory";
 
 import { showSuccessMessage, showErrorMessage } from '../../../utils/notifications';
 const BASE_URL = 'https://6a1405126c7db8aac053ae15.mockapi.io/territories';
