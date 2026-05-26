@@ -20,6 +20,8 @@ export default function FullViewGrid() {
     const navigate = useNavigate()
     const { data, isLoading } = useTerritories();
 
+  
+
     if (isLoading) return <div>Loading...</div>;
 
     return (

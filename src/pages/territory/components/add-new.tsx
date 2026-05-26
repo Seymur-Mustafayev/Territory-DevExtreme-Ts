@@ -1,18 +1,16 @@
-import usePostTerritory from '../api/post-territory';
+import useAddTerritory from '../api/add-territory';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 export default function AddNew() {
     const navigate = useNavigate();
-    const { mutate, isPending } = usePostTerritory();
+    const { mutate, isPending} = useAddTerritory();
     const [formData, setFormData] = useState({ name: '', code: '' });
 
     const onSubmit = () => {
-        mutate(formData, {
-            onSuccess: () => {
-                navigate('/');
-            }
-        });
+        mutate(formData);
+        navigate('/')
+
     };
 
     return (

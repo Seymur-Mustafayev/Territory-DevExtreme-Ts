@@ -10,6 +10,9 @@ export default function useTerritories() {
             const res = await fetch(BASE_URL);
             return res.json() as Promise<Territory[]>;
         }
+        
+        ,
+        
     });
 
     return {
